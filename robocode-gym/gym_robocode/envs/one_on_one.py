@@ -25,7 +25,7 @@ class OneOnOneEnv(gym.Env):
         WIDTH=800
         self.action_space = spaces.Discrete(16)
         self.observation_space = spaces.Box(low=0, high=255,
-                                        shape=(HEIGHT, WIDTH, 3))
+                                        shape=(HEIGHT, WIDTH, 3), dtype=numpy.uint8)
 
         ### Server setup
         self.r = RoboCode()
@@ -35,9 +35,10 @@ class OneOnOneEnv(gym.Env):
         self.last_frame = None
 
     def reset(self):
-        obs = self.r.remote_client.reset()
-        self.last_frame = self.r.remote_client.obsAsNumpyArray(obs['observation'])
-        return self.last_frame, obs['reward'], obs['done'], obs['info']
+        self.r.remote_client.reset()
+        obs = self.step(0)
+        return obs[0]
+        #return self.last_frame, obs['reward'], obs['done'], obs['info']
 
 
     def step(self, action):
@@ -114,21 +115,18 @@ class RemoteClient():
         pass
 
     def reset(self):
-        connection = http.client.HTTPConnection('localhost:8888')
+        connection = http.client.HTTPConnection('localhost:8000')
         connection.request('GET','/reset')
-        obs = self.step(0)
-        while(obs == None):
-            obs = self.step(0)
-        return obs
 
 
     def step(self,action: int):
-        connection = http.client.HTTPConnection('localhost:8888')
+        connection = http.client.HTTPConnection('localhost:8000')
         headers = {'Content-type': 'application/json'}
         actionBlob = {'actionChoice': int(action)}
         jsonAction = json.dumps(actionBlob)
         connection.request('POST','/step',jsonAction,headers)
-        return json.loads(connection.getresponse().read().decode())
+        resp = connection.getresponse().read().decode()
+        return json.loads(resp)
 
     def writeImage(self, b64String):
         if b64String != b'':
@@ -136,6 +134,7 @@ class RemoteClient():
             img.save(f"{int(time.time())}.png")
 
     def obsAsNumpyArray(self, b64String):
-        if b64String != b'':
-            img = Image.open(io.BytesIO(base64.decodebytes(bytes(b64String, "utf-8"))))
-            return numpy.asarray(img)
+        if b64String == b'' or b64String == '':
+            return numpy.empty((600,800,3),dtype=numpy.uint8)
+        img = Image.open(io.BytesIO(base64.decodebytes(bytes(b64String, "utf-8"))))
+        return numpy.asarray(img, dtype=numpy.uint8)
