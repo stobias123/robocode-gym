@@ -9,13 +9,15 @@ video_length = 100
 
 env= gym.make(env_id)
 rec = VideoRecorder(env,'foo.mp4',enabled=True)
-obs = env.reset()
+env.reset()
 rec.capture_frame()
+done = False
 
-while(not obs[2]):
+while(not done):
   env.render()
   rec.capture_frame()
   obs = env.step(env.action_space.sample())
+  done = obs[2]
 
 print("saved video")
 rec.close()
