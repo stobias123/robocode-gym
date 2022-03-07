@@ -3,9 +3,10 @@ from gym_robocode.envs.base import BaseRobocodeEnv
 from gym_robocode.envs.lib.robocode_manager import RoboCodeManager
 from gym_robocode.envs.lib.connection_manager import ConnectionManager
 from random import randint
-import logging
-import time
 from PIL import Image
+
+logging.basicConfig(level=logging.INFO)
+
 
 
 class RobocodeV2(BaseRobocodeEnv):

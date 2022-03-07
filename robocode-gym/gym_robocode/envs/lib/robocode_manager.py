@@ -21,7 +21,8 @@ class RoboCodeManager:
                                           8000: self.port_number 
                                       })
 
-        time.sleep(15)
+        print(container.id)
+        time.sleep(5)
         logging.info(f"[RoboCode] Started Robocode on port {self.port_number}")
 
     def stop(self):
