@@ -7,7 +7,7 @@ logger = logging.getLogger('')
 logging.basicConfig()
 logger.setLevel(logging.DEBUG)
 
-env = gym.make('Robocode-v0')
+env = gym.make('RobocodeDownSample-v2')
 
 action = env.action_space.sample()
 env.reset()

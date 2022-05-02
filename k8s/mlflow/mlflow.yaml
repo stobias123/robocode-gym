@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mlflow
+  labels:
+    app: mlflow
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: mlflow
+      labels:
+        app: mlflow
+    spec:
+      containers:
+        - name: mlflow
+          image: gcr.io/stobias-dev/mlflow:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5000
+          command:
+            - mlflow
+            - server
+            - -h
+            - 0.0.0.0
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: mlflow

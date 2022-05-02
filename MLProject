@@ -1,0 +1,8 @@
+name: pytorch_tutorial
+
+docker_env:
+  image:  stobias123/robocode-gym
+
+entry_points:
+  main:
+    command: python benchmark.py
