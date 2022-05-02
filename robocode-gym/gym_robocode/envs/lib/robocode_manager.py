@@ -15,15 +15,15 @@ class RoboCodeManager:
 # docker run -it --net=host -d --name robocode stobias123/robocode
     def start(self):
         logging.info(f"[RoboCode] Starting Robocode on port {self.port_number}")
-        container = self.docker_client.containers.run(self.robocode_image,
+        self.container = self.docker_client.containers.run(self.robocode_image,
                                       detach=True,
+                                      auto_remove=True,
                                       ports= {
                                           8000: self.port_number 
                                       })
-
-        print(container.id)
+        logging.info(f"Started container {self.container.id}")
         time.sleep(5)
         logging.info(f"[RoboCode] Started Robocode on port {self.port_number}")
 
     def stop(self):
-        self.container.remove(force=True)
+        self.container.stop()

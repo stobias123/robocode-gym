@@ -13,6 +13,7 @@ video_length = 100
 
 env = gym.make(env_id)
 # Record the video starting at the first step
+
 #env = VecVideoRecorder(env, video_folder,
 #                       record_video_trigger=lambda x: x == 0, video_length=video_length,
 #                       name_prefix=f"random-agent-{env_id}")
@@ -34,3 +35,21 @@ for i in range(100):
     if done:
       obs = env.reset()
 env.close()
+
+def train(env, model, timesteps):
+    model.learn(total_timesteps=timesteps)
+    start = datetime.now()
+    obs = env.reset()
+    for i in range(timesteps):
+        if i % 250 == 0:
+            now = datetime.now()
+            delta = (now - start).total_seconds()
+            print(f"Steps {i} in {delta}")
+            print(f"Steps per second - {i/delta}")
+        action, _state = model.predict(obs, deterministic=True)
+        obs, reward, done, info = env.step(env.action_space.sample())
+        #env.render()
+        if done:
+          obs = env.reset()
+    env.close()
+

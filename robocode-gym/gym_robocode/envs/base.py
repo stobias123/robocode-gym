@@ -19,17 +19,16 @@ class BaseRobocodeEnv(gym.Env):
     def __init__(self):
         self.__version__ = "0.1.0"
         super(BaseRobocodeEnv, self).__init__()
-        logging.info(f"[BaseRobocodeEnv Env] - Version {self.__version__}")
+        #logging.info(f"[BaseRobocodeEnv Env] - Version {self.__version__}")
         # Env Setup - WASD to integer.
-        HEIGHT=600
-        WIDTH=800
+        self.HEIGHT=600
+        self.WIDTH=800
         self.action_space = spaces.Discrete(16)
         self.observation_space = spaces.Box(low=0, high=255,
-                                        shape=(HEIGHT, WIDTH, 3), dtype=numpy.uint8)
+                                        shape=(self.HEIGHT, self.WIDTH, 3), dtype=numpy.uint8)
 
     def reset(self):
       pass 
-
 
     def step(self, action):
       pass 

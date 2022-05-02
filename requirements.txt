@@ -2,3 +2,5 @@ torch
 tensorboard
 stable-baselines3
 docker
+opencv-python
+pytorch_lightning
