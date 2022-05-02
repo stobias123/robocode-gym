@@ -61,8 +61,9 @@ with mlflow.start_run() as active_run:
         "model": "PPO",
         "policy": policy}
     )
+
     ## Train - should take ~23 mins at 7FPS.
-    robo_manager = K8sManager(randint(32768, 65535), namespace='robocode', robocode_image='stobias123/robocode')
+    robo_manager = K8sManager(namespace='robocode')
     connection_manager = ConnectionManager(port_number=robo_manager.port_number)
     env = gym.make(env_id)
     env.init(robo_manager, connection_manager)
