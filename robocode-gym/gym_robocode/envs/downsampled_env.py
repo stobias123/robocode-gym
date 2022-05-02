@@ -1,6 +1,6 @@
 import logging
 from gym_robocode.envs import RobocodeV2
-from gym_robocode.envs.lib.robocode_manager import RoboCodeManager
+from gym_robocode.envs.lib.robocode_manager import RobocodeManager
 from gym_robocode.envs.lib.connection_manager import ConnectionManager
 from random import randint
 import numpy
