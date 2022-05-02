@@ -1,8 +1,8 @@
-name: pytorch_tutorial
+name: robocode
 
 docker_env:
-  image:  stobias123/robocode-gym
+  image:  gcr.io/stobias-dev/robocode-mlflow
 
 entry_points:
   main:
-    command: python benchmark.py
+    command: "python pipeline.py"
