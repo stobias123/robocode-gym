@@ -1,0 +1,22 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "robocode"
+  namespace: mlflow
+spec:
+  ttlSecondsAfterFinished: 100
+  backoffLimit: 0
+  template:
+    spec:
+      containers:
+      - name: "robocode"
+        image: "{replaced with URI of Docker image created during Project execution}"
+        command: []
+        env: []
+        imagePullPolicy: Always
+        #resources:
+        #  requests:
+        #    nvidia.com/gpu: 1
+        #  limits:
+        #    nvidia.com/gpu: 1
+      restartPolicy: Never
