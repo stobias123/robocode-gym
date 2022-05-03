@@ -11,6 +11,7 @@ class ConnectionManager():
         print(f"Connection manager started with connection url - {self.connection_url}")
 
     def reset(self):
+        print('[ConnectionManager] Resetting')
         connection = http.client.HTTPConnection(self.connection_url)
         connection.request('GET','/reset')
 

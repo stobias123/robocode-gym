@@ -25,9 +25,17 @@ spec:
             - 0.0.0.0
             - --backend-store-uri
             - file:///data
+            - --serve-artifacts
+            - --artifacts-destination
+            - s3://mlflow-s3-bucket
           volumeMounts:
           - mountPath: /data
             name: mlfllow-vol2
+          env:
+          - name: AWS_ACCESS_KEY_ID
+            value: AKIA44JNN5766NC6PWMV
+          - name: AWS_SECRET_ACCESS_KEY
+            value: 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
       restartPolicy: Always
       volumes:
       - name: mlfllow-vol2

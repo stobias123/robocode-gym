@@ -1,0 +1,44 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  annotations:
+    batch.kubernetes.io/job-tracking: ""
+  labels:
+    job-name: robocode-2022-05-02-20-36-37-515714
+  generateName: robocode-train-
+  namespace: mlflow
+spec:
+  backoffLimit: 0
+  completionMode: NonIndexed
+  completions: 1
+  parallelism: 1
+  suspend: false
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        controller-uid: b8b06024-9157-44d2-8f26-d82cab69fa5c
+        job-name: robocode-2022-05-02-20-36-37-515714
+    spec:
+      containers:
+      - command:
+        - python
+        - pipeline.py
+        env:
+        - name: MLFLOW_RUN_ID
+          value: f75e6f4238c343a09853fa88c963c13e
+        - name: MLFLOW_TRACKING_URI
+          value: http://mlflow.10.20.50.162.nip.io:8080/
+        - name: MLFLOW_EXPERIMENT_ID
+          value: "0"
+        image: gcr.io/stobias-dev/robocode-mlflow-example:113ec9e@sha256:abb599053364836415d1279d62f4a25cd21bb3404b91b4e198673bd633d53ea1
+        imagePullPolicy: Always
+        name: robocode
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Never
+      schedulerName: default-scheduler
+      terminationGracePeriodSeconds: 30
+  ttlSecondsAfterFinished: 100
+

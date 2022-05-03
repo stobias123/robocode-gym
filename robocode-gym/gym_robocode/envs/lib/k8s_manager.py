@@ -1,3 +1,4 @@
+import logging
 import os
 from random import randint
 from gym_robocode.envs.lib.robocode_manager import *
@@ -9,7 +10,10 @@ class K8sManager(RobocodeManager):
     def __init__(self,  namespace: str, port_number=8000, robocode_image: str = 'gcr.io/stobias-dev/robocode'):
         super().__init__(port_number=port_number, robocode_image=robocode_image)
         print("loading in cluster config")
-        config.load_incluster_config()
+        if os.environ.get('KUBECONFIG') == None:
+            config.load_incluster_config()
+        else:
+            config.load_config()
         self.v1_client = client.CoreV1Api()
         self.namespace = namespace
         self.port_number = port_number
@@ -65,5 +69,4 @@ class K8sManager(RobocodeManager):
         return pod_list.items[0]
 
     def stop(self):
-        self.v1_client.delete_namespaced_pod(label_selector=f"job_name={self.pod_name}",
-                                                          namespace=self.namespace)
+        self.v1_client.delete_namespaced_pod(name=self.pod_name, namespace=self.namespace)

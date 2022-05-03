@@ -10,6 +10,7 @@ import gym_robocode
 from gym_robocode.envs.lib.connection_manager import ConnectionManager
 from gym_robocode.envs.lib.k8s_manager import K8sManager
 from mlflow import log_metric, log_param, log_artifacts
+import time
 from stable_baselines3.common.vec_env import VecVideoRecorder, DummyVecEnv
 from stable_baselines3 import A2C, PPO
 from stable_baselines3.common.logger import Logger
@@ -60,30 +61,31 @@ env_id = 'RobocodeDownSample-v2'
 run_id = os.environ.get('MLFLOW_RUN_ID')
 
 if __name__ == "__main__":
-    client = MlflowClient()
-    run = client.create_run("1")
-    run = mlflow.start_run(run_id = run.info.run_id)
+    #client = MlflowClient()
+    #run = client.create_run("1")
+    #run = mlflow.start_run(run_id = run.info.run_id)
 
-    #with mlflow.start_run() as active_run:
-    mlflow.pytorch.autolog()
-    mlflow.log_params({
-        "env": env_id,
-        "model": "PPO",
-        "policy": policy}
-    )
+    with mlflow.start_run() as active_run:
+        mlflow.pytorch.autolog()
+        mlflow.log_params({
+            "env": env_id,
+            "model": "PPO",
+            "policy": policy}
+        )
 
-    ## Train - should take ~23 mins at 7FPS.
-    robo_manager = K8sManager(namespace='robocode')
-    robo_manager.start()
-    connection_manager = ConnectionManager(hostname=robo_manager.ip, port_number=robo_manager.port_number)
-    env = gym.make(env_id)
-    env.init(robo_manager, connection_manager)
-    logger = MLFlowLogger(folder='', output_formats="")
-    model = PPO(policy, env, verbose=1)
-    model.set_logger(logger)
-    model.learn(total_timesteps=500)
+        ## Train - should take ~23 mins at 7FPS.
+        env = gym.make(env_id)
+        logger = MLFlowLogger(folder='', output_formats="")
+        model = PPO(policy, env, verbose=1)
+        model.set_logger(logger)
+        model.learn(total_timesteps=100)
 
-    ## Eval and record
-    record_video(model, env_id, policy)
-    #mlflow.end_run()
+        ## Eval and record
+        record_video(model, env_id, policy)
+        #/mlflow/projects/code/videos/MlpPolicy-RobocodeDownSample-v2-step-0-to-step-1000.mp4
+        uri = mlflow.get_artifact_uri()
+        print(f"Trying to upload to {uri}.")
+        mlflow.log_artifacts('/mlflow/projects/code/videos/')
+        print(f"Trying to find the mlflow videos from my current dir.")
+        #mlflow.end_run()
 
