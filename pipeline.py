@@ -1,7 +1,11 @@
+import os
 from random import randint
 
 import mlflow
 import gym
+from mlflow.entities import experiment
+from mlflow.tracking import MlflowClient
+
 import gym_robocode
 from gym_robocode.envs.lib.connection_manager import ConnectionManager
 from gym_robocode.envs.lib.k8s_manager import K8sManager
@@ -9,16 +13,14 @@ from mlflow import log_metric, log_param, log_artifacts
 from stable_baselines3.common.vec_env import VecVideoRecorder, DummyVecEnv
 from stable_baselines3 import A2C, PPO
 from stable_baselines3.common.logger import Logger
-from typing import Any, Dict, List, Optional, Sequence, TextIO, Tuple, Union
+from typing import Any, Optional, Tuple, Union
 from collections import defaultdict
 
 from datetime import datetime
 
 from gym_robocode.envs.lib.robocode_manager import RobocodeManagerImpl
 
-mlflow.set_tracking_uri("http://mlflow.10.20.50.162.nip.io:8080/")
-mlflow.set_experiment("robocode")
-mlflow.pytorch.autolog()
+#mlflow.set_tracking_uri("http://mlflow.10.20.50.162.nip.io:8080/")
 
 
 class MLFlowLogger(Logger):
@@ -55,7 +57,15 @@ def record_video(model, env_id, policy_name):
 policy = 'MlpPolicy'
 env_id = 'RobocodeDownSample-v2'
 
-with mlflow.start_run() as active_run:
+run_id = os.environ.get('MLFLOW_RUN_ID')
+
+if __name__ == "__main__":
+    client = MlflowClient()
+    run = client.create_run("1")
+    run = mlflow.start_run(run_id = run.info.run_id)
+
+    #with mlflow.start_run() as active_run:
+    mlflow.pytorch.autolog()
     mlflow.log_params({
         "env": env_id,
         "model": "PPO",
@@ -64,13 +74,16 @@ with mlflow.start_run() as active_run:
 
     ## Train - should take ~23 mins at 7FPS.
     robo_manager = K8sManager(namespace='robocode')
-    connection_manager = ConnectionManager(port_number=robo_manager.port_number)
+    robo_manager.start()
+    connection_manager = ConnectionManager(hostname=robo_manager.ip, port_number=robo_manager.port_number)
     env = gym.make(env_id)
     env.init(robo_manager, connection_manager)
     logger = MLFlowLogger(folder='', output_formats="")
     model = PPO(policy, env, verbose=1)
     model.set_logger(logger)
-    model.learn(total_timesteps=5000)
+    model.learn(total_timesteps=500)
 
     ## Eval and record
     record_video(model, env_id, policy)
+    #mlflow.end_run()
+

@@ -1,7 +1,7 @@
 name: robocode
 
 docker_env:
-  image:  gcr.io/stobias-dev/robocode-mlflow
+  image:  gcr.io/stobias-dev/robocode-mlflow-base
 
 entry_points:
   main:

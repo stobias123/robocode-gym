@@ -1,0 +1,6 @@
+setup.py
+gym_robocode/__init__.py
+robocode_gym.egg-info/PKG-INFO
+robocode_gym.egg-info/SOURCES.txt
+robocode_gym.egg-info/dependency_links.txt
+robocode_gym.egg-info/top_level.txt

@@ -8,11 +8,11 @@ from PIL import Image
 class ConnectionManager():
     def __init__(self,port_number,hostname='localhost'):
         self.connection_url = f"{hostname}:{port_number}"
+        print(f"Connection manager started with connection url - {self.connection_url}")
 
     def reset(self):
         connection = http.client.HTTPConnection(self.connection_url)
         connection.request('GET','/reset')
-
 
     def step(self,action: int):
         connection = http.client.HTTPConnection(self.connection_url)

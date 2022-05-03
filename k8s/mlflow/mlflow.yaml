@@ -23,7 +23,16 @@ spec:
             - server
             - -h
             - 0.0.0.0
+            - --backend-store-uri
+            - file:///data
+          volumeMounts:
+          - mountPath: /data
+            name: mlfllow-vol2
       restartPolicy: Always
+      volumes:
+      - name: mlfllow-vol2
+        persistentVolumeClaim:
+          claimName: mlfllow-vol2
   selector:
     matchLabels:
       app: mlflow

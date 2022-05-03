@@ -5,3 +5,4 @@ resources:
   - mlflow-service.yaml
   - mlflow.yaml
   - mlflow-ingress.yaml
+  - mlflow-pvc.yaml

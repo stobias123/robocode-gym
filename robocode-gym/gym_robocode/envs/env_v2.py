@@ -22,9 +22,9 @@ class RobocodeV2(BaseRobocodeEnv):
         self.last_frame = None
         self.episode_over = False
 
+    ## robo manager must be started before this happens.
     def init(self, robo_manager: RobocodeManager, connection_manager: ConnectionManager):
         self.robo_manager = robo_manager
-        self.robo_manager.start()
         self.port_number = self.robo_manager.port_number
         self.connection_manager = connection_manager
 
