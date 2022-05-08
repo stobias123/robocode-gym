@@ -38,8 +38,8 @@ class MLFlowLogger(Logger):
 
 
 def record_video(model: str , env_id: str , policy_name: str, record_steps: int):
-    video_folder = 'videos/'
-    video_length = 1000
+    video_folder = 'artifacts/'
+    video_length = record_steps
 
     env = DummyVecEnv([lambda: gym.make(env_id)])
 
@@ -63,7 +63,7 @@ env_id = 'RobocodeDownSample-v2'
 if __name__ == "__main__":
     parser = ArgumentParser()
     parser.add_argument("--timesteps", dest="timesteps", help="timesteps to run training for", default=None, type=int)
-    parser.add_argument("--record-timesteps", dest="record-timesteps", help="timesteps to run training for", default=None, type=int)
+    parser.add_argument("--record-timesteps", dest="record_timesteps", help="timesteps to run training for", default=None, type=int)
     args = parser.parse_args()
 
     client = MlflowClient()
@@ -88,14 +88,13 @@ if __name__ == "__main__":
         model = PPO(policy, env, verbose=1)
         model.set_logger(logger)
         model.learn(total_timesteps=args.timesteps)
-        model.save('robocode-model')
+        model.save('artifacts/robocode-model')
 
 
         ## Eval and record
-        record_video(model, env_id, policy, record_steps=10)
+        record_video(model, env_id, policy, record_steps=args.record_timesteps)
         #/mlflow/projects/code/videos/MlpPolicy-RobocodeDownSample-v2-step-0-to-step-1000.mp4
         uri = mlflow.get_artifact_uri()
         print(f"Trying to upload to {uri}.")
-        mlflow.log_artifact('/mlflow/projects/code/robocode-model.zip')
-        mlflow.log_artifacts('/mlflow/projects/code/models/')
+        mlflow.log_artifacts('/mlflow/projects/code/artifacts/')
         print(f"Trying to find the mlflow videos from my current dir.")
