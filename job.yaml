@@ -1,22 +1,53 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: "robocode"
+  annotations:
+    batch.kubernetes.io/job-tracking: ""
+  labels:
+    job-name: robocode-example-2-2022-05-08-14-42-33-304094
+  name: robocode-example-2-2022-05-08-14-42-33-304094
   namespace: mlflow
 spec:
-  ttlSecondsAfterFinished: 100
   backoffLimit: 0
+  completionMode: NonIndexed
+  completions: 1
+  parallelism: 1
+  suspend: false
   template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        job-name: robocode-example-2-2022-05-08-14-42-33-304094
     spec:
       containers:
-      - name: "robocode"
-        image: "{replaced with URI of Docker image created during Project execution}"
-        command: []
-        env: []
+      - command:
+        - python
+        - pipeline.py
+        - --timesteps
+        - "100000"
+        - --record-timesteps
+        - "2000"
+        env:
+        - name: AWS_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              key: aws_access_key_id
+              name: aws-key
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              key: aws_secret_access_key
+              name: aws-key
+        - name: MLFLOW_TRACKING_URI
+          value: http://mlflow.10.20.50.162.nip.io:8080
+        - name: MLFLOW_EXPERIMENT_ID
+          value: "3"
+        image: gcr.io/stobias-dev/robocode-mlflow-example:fcd37ee
         imagePullPolicy: Always
-        #resources:
-        #  requests:
-        #    nvidia.com/gpu: 1
-        #  limits:
-        #    nvidia.com/gpu: 1
+        name: robocode-example-2
+      dnsPolicy: ClusterFirst
       restartPolicy: Never
+      schedulerName: default-scheduler
+      terminationGracePeriodSeconds: 30
+  ttlSecondsAfterFinished: 100
+

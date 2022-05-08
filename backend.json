@@ -1,5 +1,5 @@
 {
   "kube-context": "microk8s",
   "repository-uri": "gcr.io/stobias-dev/robocode-mlflow-example",
-  "kube-job-template-path": "/Users/steven.tobias/repos/personal/robocode-gym/job.yaml"
+  "kube-job-template-path": "job.yaml"
 }

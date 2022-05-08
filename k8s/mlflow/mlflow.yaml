@@ -28,14 +28,22 @@ spec:
             - --serve-artifacts
             - --artifacts-destination
             - s3://mlflow-s3-bucket
+            - --gunicorn-opts
+            -  "--access-logfile '-' --error-logfile '-'"
           volumeMounts:
           - mountPath: /data
             name: mlfllow-vol2
           env:
           - name: AWS_ACCESS_KEY_ID
-            value: AKIA44JNN5766NC6PWMV
+            valueFrom:
+              secretKeyRef:
+                name: aws-key
+                key: aws_access_key_id
           - name: AWS_SECRET_ACCESS_KEY
-            value: quebmKoDL1iM1zOTu1bTVXG5Iz3EAzJDUAuN9ire
+            valueFrom:
+              secretKeyRef:
+                name: aws-key
+                key: aws_secret_access_key
       restartPolicy: Always
       volumes:
       - name: mlfllow-vol2

@@ -5,4 +5,7 @@ docker_env:
 
 entry_points:
   main:
-    command: "python pipeline.py"
+    parameters:
+      timesteps: { type: int, default: 100 }
+      record_timesteps: { type: int, default: 1000 }
+    command: "python pipeline.py --timesteps {timesteps} --record-timesteps {record_timesteps}"

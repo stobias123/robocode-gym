@@ -1,6 +1,7 @@
 import time
 import numpy
 import json
+import logging
 import http.client
 import io, base64
 from PIL import Image
@@ -11,7 +12,7 @@ class ConnectionManager():
         print(f"Connection manager started with connection url - {self.connection_url}")
 
     def reset(self):
-        print('[ConnectionManager] Resetting')
+        logging.info('[ConnectionManager] Resetting')
         connection = http.client.HTTPConnection(self.connection_url)
         connection.request('GET','/reset')
 
