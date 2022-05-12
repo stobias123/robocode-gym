@@ -33,7 +33,7 @@ class K8sManager(RobocodeManager):
         container = client.V1Container(
             image=self.robocode_image,
             name="train",
-            image_pull_policy='IfNotPresent',
+            image_pull_policy='Always',
             ports=[client.V1ContainerPort(
                 container_port=self.port_number
             )]
