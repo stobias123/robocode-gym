@@ -5,7 +5,7 @@ import time
 
 class RobocodeManager:
 
-    def __init__(self, port_number: int, robocode_image: str = 'gcr.io/stobias-dev/robocode:12a6d0da5'):
+    def __init__(self, port_number: int, robocode_image: str = 'gcr.io/stobias-dev/robocode'):
         self.robocode_image: str = robocode_image
         self.port_number: int = None
 
@@ -20,7 +20,7 @@ class RobocodeManagerImpl(RobocodeManager):
     def __init__(self, port_number):
         self.docker_client = docker.from_env()
         self.port_number = port_number
-        self.robocode_image = 'gcr.io/stobias-dev/robocode:12a6d0da5'
+        self.robocode_image = 'gcr.io/stobias-dev/robocode'
         self.container = None
 
     # docker run -it --net=host -d --name robocode stobias123/robocode
