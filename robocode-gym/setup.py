@@ -5,7 +5,7 @@ import subprocess
 import sys
 
 setup(name='robocode-gym',
-      version='0.3.0',
+      version='0.4.0',
       description='Python bindings to Robocode games',
       url='',
       author='OpenAI',
