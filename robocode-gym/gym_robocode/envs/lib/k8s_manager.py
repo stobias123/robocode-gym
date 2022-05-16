@@ -7,7 +7,7 @@ from kubernetes import client, config, watch
 
 
 class K8sManager(RobocodeManager):
-    def __init__(self,  namespace: str, port_number=8000, robocode_image: str = 'gcr.io/stobias-dev/robocode'):
+    def __init__(self,  namespace: str, port_number=8000, robocode_image: str = 'gcr.io/stobias-dev/robocode:1.3.4'):
         super().__init__(port_number=port_number, robocode_image=robocode_image)
         print("loading in cluster config")
         if os.environ.get('KUBECONFIG') == None:

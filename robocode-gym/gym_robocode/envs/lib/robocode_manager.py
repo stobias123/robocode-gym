@@ -5,7 +5,7 @@ import time
 
 class RobocodeManager:
 
-    def __init__(self, port_number: int, robocode_image: str = 'gcr.io/stobias-dev/robocode'):
+    def __init__(self, port_number: int, robocode_image: str = 'gcr.io/stobias-dev/robocode:1.3.4'):
         self.robocode_image: str = robocode_image
         self.port_number: int = None
 
