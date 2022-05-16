@@ -1,0 +1,4 @@
+FROM gcr.io/stobias-dev/robocode-mlflow-base
+COPY pipeline.py /app/pipeline.py
+COPY test_upload.py /app/test_upload.py
+COPY train_video.py /app/train_video.py
