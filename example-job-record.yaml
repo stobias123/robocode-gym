@@ -1,0 +1,52 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  annotations:
+    batch.kubernetes.io/job-tracking: ""
+  generateName: robocode-record-manual-
+  namespace: mlflow
+spec:
+  backoffLimit: 0
+  completionMode: NonIndexed
+  completions: 1
+  parallelism: 1
+  suspend: false
+  template:
+    spec:
+      containers:
+      - command:
+          - sleep
+          - "1000"
+        #- python
+        #- train_video.py
+        #- --model-path
+        #- /artifacts/robocode-model
+        env:
+        - name: AWS_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              key: aws_access_key_id
+              name: aws-key
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              key: aws_secret_access_key
+              name: aws-key
+        - name: MLFLOW_TRACKING_URI
+          value: http://mlflow.10.20.50.162.nip.io:8080
+        - name: MLFLOW_EXPERIMENT_ID
+          value: "1"
+        image: gcr.io/stobias-dev/robocode-mlflow-run
+        imagePullPolicy: Always
+        name: robocode-example
+        volumeMounts:
+          - mountPath: /artifacts/
+            name: data
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: experiments
+      restartPolicy: Never
+      schedulerName: default-scheduler
+      terminationGracePeriodSeconds: 30
+  ttlSecondsAfterFinished: 100
