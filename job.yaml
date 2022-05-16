@@ -3,9 +3,7 @@ kind: Job
 metadata:
   annotations:
     batch.kubernetes.io/job-tracking: ""
-  labels:
-    job-name: robocode-example-2-2022-05-08-14-42-33-304094
-  name: robocode-example-2-2022-05-08-14-42-33-304094
+  generateName: robocode-example-2-
   namespace: mlflow
 spec:
   backoffLimit: 0
@@ -16,15 +14,13 @@ spec:
   template:
     metadata:
       creationTimestamp: null
-      labels:
-        job-name: robocode-example-2-2022-05-08-14-42-33-304094
     spec:
       containers:
       - command:
         - python
         - pipeline.py
         - --timesteps
-        - "100000"
+        - "50000"
         - --record-timesteps
         - "2000"
         env:
@@ -38,11 +34,7 @@ spec:
             secretKeyRef:
               key: aws_secret_access_key
               name: aws-key
-        - name: MLFLOW_TRACKING_URI
-          value: http://mlflow.10.20.50.162.nip.io:8080
-        - name: MLFLOW_EXPERIMENT_ID
-          value: "3"
-        image: gcr.io/stobias-dev/robocode-mlflow-example:fcd37ee
+        image: gcr.io/stobias-dev/robocode-mlflow-example:6615db3
         imagePullPolicy: Always
         name: robocode-example-2
       dnsPolicy: ClusterFirst

@@ -4,6 +4,8 @@ metadata:
   name: mlflow
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/proxy-body-size: "1500m"
+    nginx.org/client-max-body-size: "1500m"
 spec:
   rules:
   - host: mlflow.10.20.50.162.nip.io

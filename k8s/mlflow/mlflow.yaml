@@ -24,7 +24,7 @@ spec:
             - -h
             - 0.0.0.0
             - --backend-store-uri
-            - file:///data
+            - sqlite:///data/mlflow.db
             - --serve-artifacts
             - --artifacts-destination
             - s3://mlflow-s3-bucket

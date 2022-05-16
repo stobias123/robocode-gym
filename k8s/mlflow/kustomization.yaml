@@ -6,3 +6,6 @@ resources:
   - mlflow.yaml
   - mlflow-ingress.yaml
   - mlflow-pvc.yaml
+  - postgres.yaml
+  - postgres-pvc.yaml
+  - postgres-service.yaml

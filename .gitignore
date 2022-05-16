@@ -1,6 +1,7 @@
 __pycache__/
-mlflow/
+./mlflow/
 logs/
 videos/
 mlruns/
 .idea/
+model/

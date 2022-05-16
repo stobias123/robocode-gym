@@ -23,6 +23,15 @@ spec:
               value: mlflow
             - name: POSTGRES_PASSWORD
               value: abc123
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: postgres
+      volumes:
+        - name: postgres
+          persistentVolumeClaim:
+            claimName: postgresql-pv
       restartPolicy: Always
   selector:
     matchLabels:
